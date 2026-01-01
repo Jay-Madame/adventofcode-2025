@@ -27,6 +27,7 @@ func goRight(amountToTurn int, currentPosition int) (int, int){
 			currentPosition++
 		} else {
 			currentPosition = 0
+			passedZeroCounter++
 		}
 	}
 	return currentPosition, passedZeroCounter
