@@ -7,18 +7,21 @@ import (
 	"strconv"
 )
 
-func goLeft(amountToTurn int, currentPosition int) int{
+func goLeft(amountToTurn int, currentPosition int) (int, int){
+	passedZeroCounter := 0
 	for i := 0; i < amountToTurn; i++ {
 		if currentPosition != 0 {
 			currentPosition--
 		} else {
 			currentPosition = 99
+			passedZeroCounter++
 		}
 	}
-	return currentPosition
+	return currentPosition, passedZeroCounter
 }
 
-func goRight(amountToTurn int, currentPosition int) int{
+func goRight(amountToTurn int, currentPosition int) (int, int){
+	passedZeroCounter := 0
 	for i := 0; i < amountToTurn; i++ {
 		if currentPosition != 99 {
 			currentPosition++
@@ -26,18 +29,17 @@ func goRight(amountToTurn int, currentPosition int) int{
 			currentPosition = 0
 		}
 	}
-	return currentPosition
+	return currentPosition, passedZeroCounter
 }
 
-func processLine(LineOfText string, currentPosition int) int{
+func processLine(LineOfText string, currentPosition int) (int, int){
 	direction := LineOfText[:1]
 	amountToTurn, _ := strconv.Atoi(LineOfText[1:])
 	if direction == "L" {
-		currentPosition = goLeft(amountToTurn, currentPosition)
+		return goLeft(amountToTurn, currentPosition)
 	} else {
-		currentPosition = goRight(amountToTurn, currentPosition)
+		return goRight(amountToTurn, currentPosition)
 	}
-	return currentPosition
 }
 
 func main() {
@@ -50,13 +52,15 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	var currentPosition int = 50
 	var totalAmountOfZeros int = 0
+	var zerosPassed int = 0
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		currentPosition = processLine(line, currentPosition)
+		currentPosition, zerosPassed = processLine(line, currentPosition)
 		if currentPosition == 0 {
 			totalAmountOfZeros++
 		}
+		totalAmountOfZeros = totalAmountOfZeros+zerosPassed
 	}
 	
 	if err := scanner.Err(); err != nil {
