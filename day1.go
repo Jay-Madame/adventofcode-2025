@@ -14,6 +14,8 @@ func goLeft(amountToTurn int, currentPosition int) (int, int){
 			currentPosition--
 		} else {
 			currentPosition = 99
+		}
+		if currentPosition == 0 {
 			passedZeroCounter++
 		}
 	}
@@ -27,6 +29,8 @@ func goRight(amountToTurn int, currentPosition int) (int, int){
 			currentPosition++
 		} else {
 			currentPosition = 0
+		}
+		if currentPosition == 0 {
 			passedZeroCounter++
 		}
 	}
@@ -58,10 +62,7 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		currentPosition, zerosPassed = processLine(line, currentPosition)
-		if currentPosition == 0 {
-			totalAmountOfZeros++
-		}
-		totalAmountOfZeros = totalAmountOfZeros+zerosPassed
+		totalAmountOfZeros += zerosPassed
 	}
 	
 	if err := scanner.Err(); err != nil {
